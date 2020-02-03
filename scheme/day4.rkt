@@ -45,14 +45,12 @@
       (append (reverse-bad (rest lst)) (list (first lst)))))
 
 ; iterative reverse
-(define program
-'(define (reverse lst)
+(define (reverse lst)
   (define (reverse1 lst acc)
     (if (null? lst)
         acc
         (reverse1 (rest lst) (cons (first lst) acc))))
   (reverse1 lst '()))
-)
 
 ; sample s-list
 (define blob '((2 3 4) "hello" (1 (99 87)) () apple))
