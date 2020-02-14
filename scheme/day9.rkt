@@ -100,3 +100,25 @@
                  (treemap f (left t))
                  (treemap f (right t)))))
 
+(define (is-in? key bst)
+  (cond ((null? bst) false)
+        ((eq? (root bst) key) true)
+        ((< key (root bst)) (is-in? key (left bst)))
+        (else
+           (is-in? key (right bst)))
+  )
+)
+
+; is-in? written using treefold.
+; This is an O(n) function and not O(h). Why? And why is this bad?
+; WHat would an O(h) version look like 
+(define (is-inf? key bst)
+    (treefold (lambda (x l r) (or (eq? x key) l r)) false bst))
+
+; This is the O(h)version.
+(define (is-infh? key bst)
+    (treefold (lambda (x l r) (cond [(eq? x key) true] [(< key x) l] [else r])) false bst))
+
+; height written using fold
+(define (heightf t)
+  (treefold (lambda(x l r)(+ 1 (max l r))) -1 bst))
