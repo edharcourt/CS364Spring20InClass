@@ -1,0 +1,42 @@
+# and index is a dictionary where the key
+# is the word and the values is a list of line numbers
+
+from typing import Set, Union, Optional, Dict, List
+import re  # regular expression
+
+def load_stopwords() -> Optional[Set[str]]:
+    try:
+        f = open("stopwords.txt")
+    except OSError as e:
+        print("Error: file stopwords.txt cannot be opened")
+        return None
+
+    # set comprehension
+    return { w.strip() for w in f.readlines() }
+
+
+def create_index(fn: str) -> Optional[Dict[str, List[int]]]:
+    try:
+        f = open(fn)
+    except OSError as e:
+        print("Error: could not open file {}".format(fn))
+        return None
+
+    s = load_stopwords()
+    if s is None:
+        return None
+
+    index = dict()
+    split_patt = re.compile("[\s.,!\-();:]")
+    # iterate through the lines
+    for line in f:
+        words = split_patt.split(line)
+
+        for w in words:
+            pass
+            # finish on Monday Chapter
+
+
+if __name__ == "__main__":
+
+    index = create_index("mobydick.txt")
