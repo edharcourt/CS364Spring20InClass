@@ -22,21 +22,39 @@ def create_index(fn: str) -> Optional[Dict[str, List[int]]]:
         print("Error: could not open file {}".format(fn))
         return None
 
-    s = load_stopwords()
+    s: Optional[Set[str]] = load_stopwords()
     if s is None:
         return None
 
     index = dict()
-    split_patt = re.compile("[\s.,!\-();:]")
+    split_patt = re.compile('[\s.,!\-();:"]')
+    count = 0
+
     # iterate through the lines
     for line in f:
-        words = split_patt.split(line)
+        count += 1
+        words = [w.lower() for w in split_patt.split(line) if w ]
 
         for w in words:
-            pass
-            # finish on Monday Chapter
+            # TODO - check for word on line twice
+            if w not in s:
+                index.setdefault(w.lower(),[]).append(count)
+    return index
 
 
 if __name__ == "__main__":
 
     index = create_index("mobydick.txt")
+    print(index['whenever'])
+
+    # EXERCISE: Find the longest word
+    longest = max(index.keys(), key=len)
+
+    # EXERCISE: How many times does
+    # the most frequent word appear
+    most = len(max(index.values(), key=len))
+    print(most)
+
+    # EXERCISE: What word is it?
+    t = max([(k,len(v)) for (k,v) in index.items()], key=lambda x:x[1])
+    print(t)
