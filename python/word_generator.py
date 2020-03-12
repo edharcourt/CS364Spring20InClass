@@ -1,7 +1,7 @@
 from typing import Generator
 import re
 
-def word_generator(fn: str):
+def word_generator(fn: str) -> Generator[str,None,None]:
 
     try:
         f = open(fn)
