@@ -162,8 +162,32 @@
   )
 )
 
+; return 1 if a leaf 0 otherwise
+(define (leaf t)
+   (if (and (null? (left t)) (null? (right t))) 1 0))
 
+(define (count-leaves t)
+  (if (null? t)
+      0
+      (+ (leaf t) (count-leaves (left t)) (count-leaves (right t)))))
+          
 
+(define (atoms lst)
+  (if (null? lst)
+      null
+      (if (not (list? (first lst)))
+          (cons (first lst) (atoms (rest lst)))
+          (atoms (rest lst)))))
+
+(define lst '(1 2 "Hello" (4 5) 6 ()))
+
+(define (is-bt? t)
+  (cond
+      ((null? t) true)
+      ((not (list? t)) false)
+      (((compose not =) (length t) 3) false)
+      (else
+          (and (is-bt? (left t)) (is-bt? (right t))))))
 
 
 
