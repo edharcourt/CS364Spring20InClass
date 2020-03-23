@@ -1,0 +1,34 @@
+// version of C SLU C
+// figure out how to break up the program into "words"
+// words are called "tokens"
+
+3+4     // tokens are 3,+,4
+a +77   // tokens a,+,77
+// What are we going to split on?
+
+a
++
+
+
+
+
+                   77
+// Phase of breaking a program into "words" is called lexical analysis
+// the program that does lexical aalysis is called the "lexer"
+
+3 + 3.14 + z
+
+"3"  "+"  "3.14"  "+"  "z"
+
+3 + while
+
+3 + WHILE   // case sensitive or not sensitive?
+
+
+
+Lexer classify the tokens into the "kind of thing that it is"
+
+3+4
+3 +4
+
+

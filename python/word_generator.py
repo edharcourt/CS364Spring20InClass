@@ -9,7 +9,7 @@ def word_generator(fn: str) -> Generator[str,None,None]:
         print("Cannot open file {}".format(fn))
         return None
 
-    split_patt = re.compile('[\s.,!\-();:"]')
+    split_patt = re.compile('[\\s.,!\()\-;:"]')
 
     for line in f:
         words = (w for w in split_patt.split(line) if w)
