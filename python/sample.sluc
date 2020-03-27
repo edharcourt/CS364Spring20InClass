@@ -14,7 +14,7 @@ a
 
                    77
 // Phase of breaking a program into "words" is called lexical analysis
-// the program that does lexical aalysis is called the "lexer"
+// the program that does lexical analysis is called the "lexer"
 
 3 + 3.14 + z
 

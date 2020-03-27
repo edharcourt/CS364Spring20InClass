@@ -27,7 +27,7 @@ def create_index(fn: str) -> Optional[Dict[str, List[int]]]:
         return None
 
     index = dict()
-    split_patt = re.compile('[\s.,!\-();:"]')
+    split_patt = re.compile(r'[\s.,!\-();:"]')
     count = 0
 
     # iterate through the lines
