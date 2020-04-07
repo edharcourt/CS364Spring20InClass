@@ -1,52 +1,19 @@
 import sys
 from typing import Generator, Tuple
 import re
-
-"""
-. - the dot character matches any character
-#.* - searched for a comment
-\s*#.* - comments with whitespace in front including newlines
-^ - matches the start of a line
-^[ \t]*#.* - look for comments that start a line
-^[ \t]*#.*$ - match single line comment
-cl.[ds] - match clud and clas
-
-Replace single line comments with a triple quoted string version.
-
-^[ \t]*#(.*)  - single line comment but capture the comment content
-                parentheses in a regular expression represent a "capture group"
-                
-[_a-zA-Z][_a-zA-Z0-9]*   - match an identifier
-\w is shorthand for [_a-zA-Z0-9]
-[_a-zA-Z]\w*
-
-What are the rules for an integer constant?
-
-[0-9]+ - integer constant
-0[xX][0-9a-fA-F]+   - a hexadecimal constant
-
-"""
-#  """\n$1\n""" - replacement text bos where $1 represents the captured value
-
-# sample comment
-
-"""
- sample comment
-"""
-
-
 class Lexer:
 
-    # class variables
-    INTLIT = 0  # codes for the "kind" of value
-    PLUS   = 1
-    ID     = 2
-    LPAREN = 3
-    RPAREN = 4
+    # class variables that represent a code for a "kind" of token.
+    # TODO Clean this up so it is much shorter
+    INTLIT = 0        # 1) setattr builtin function
+    PLUS   = 1        # 2) namedtuple
+    ID     = 2        # 3) named tuples are not typed Typed Named Tuple in
+    LPAREN = 3        #     the typehints doc in Python
+    RPAREN = 4        # 4) Class to represent a token
+    EOF    = 5 # TODO return special end-of-file token
+    MULT   = 6
 
-    # fn - file name we are lexing
-    def __init__(self, fn:str):
-
+    def __init__(self, fn: str):
         try:
             self.f = open(fn)
         except IOError:
@@ -54,21 +21,18 @@ class Lexer:
             print("Exiting")
             sys.exit(1)  # can't go on
 
-    def token_generator(self) -> Generator[Tuple[int,str], None, None]:
-        """
-        Returns the tokens of the language
-        """
+    def token_generator(self) -> Generator[Tuple[int, str], None, None]:
 
-        # backslash plague - eliminated because of python raw strings
-        split_patt = re.compile(r"(\+)|\s|(\()|(\))")  # parentheses around a pattern
-                                                       # captures the value
-
-        # a more readable way to write the split
-        # pattern above using the VERBOSE option
-        split_patt =re.compile(
+        # TODO Can we make this more readable by putting this elsewhere?
+        # check out the documentation on |
+        # Don't forget about ^ and $
+        # TEST TEST TEST try and break your code
+        # SOLID
+        split_patt = re.compile(
             r"""             # Split on 
                (\+) |        #  plus and capture
-               (-) |         #  minus and capture, minus not special unless in []
+               (\*) |        #  times and capture
+               (-)  |        #  minus and capture, minus not special unless in []
                \s   |        #  whitespace
                (\() |        #  left paren and capture
                (\))          #  right paren and capture
@@ -76,22 +40,33 @@ class Lexer:
             re.VERBOSE
         )
 
+        # regular expression for an ID
+        # regular expression for an integer literal
+
         for line in self.f:
+
+            # save recognizing string literals and comments
+            # until the end (do these last). Try and recognize
+            # these *before* you split the line
+
             tokens = (t for t in split_patt.split(line) if t)
             for t in tokens:
-                if t == '+':                  # TODO replace with a dictionary
-                    yield (Lexer.PLUS, t)
+                # TODO replace with a dictionary
+                if t == '+':
+                    yield (Lexer.PLUS, t)   # singleton
+                elif t == '*':
+                    yield (Lexer.MULT, t)
                 elif t == '(':
                     yield (Lexer.LPAREN, t)
                 elif t == ')':
                     yield (Lexer.RPAREN, t)
                 else:
-                    yield (Lexer.ID, t)
+                    yield (Lexer.ID, t)    # singleton?
 
 
 if __name__ == "__main__":
 
-    lex = Lexer("test.sluc")
+    lex = Lexer("test.sluc")  # use command line arguments
 
     g = lex.token_generator()
 
@@ -101,5 +76,3 @@ if __name__ == "__main__":
         except StopIteration:
             print("Done")
             break
-
-
