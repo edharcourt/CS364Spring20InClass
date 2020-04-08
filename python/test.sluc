@@ -9,3 +9,13 @@ a   *(b+d)
 3.14 / a
 
 a+3*2.14/-3.19e-09
+
+" this is a string constant and // not a comment"
+
+// this is a comment and "not a string"
+
+// " //this is "
+
+// `back ticks`  @ # $  user@email.com
+
+"`` user@email.com"

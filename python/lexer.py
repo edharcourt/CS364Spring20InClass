@@ -12,6 +12,7 @@ class Lexer:
     RPAREN = 4        # 4) Class to represent a token
     EOF    = 5 # TODO return special end-of-file token
     MULT   = 6
+    MINUS  = 7
 
     def __init__(self, fn: str):
         try:
@@ -63,6 +64,8 @@ class Lexer:
                 else:
                     yield (Lexer.ID, t)    # singleton?
 
+        while (True):
+            yield(Lexer.EOF, "")
 
 if __name__ == "__main__":
 

@@ -26,6 +26,14 @@ class MultExpr(Expr):
     def __str__(self):
         return "({0} * {1})".format(str(self.left), str(self.right))
 
+
+class UnaryMinus(Expr):
+    def __init__(self, tree: Expr):
+        self.tree = tree
+
+    def __str__(self):
+        return "-{0}".format(str(self.tree))
+
 class IDExpr(Expr):
 
     def __init__(self, id: str):
@@ -33,6 +41,14 @@ class IDExpr(Expr):
 
     def __str__(self):
         return self.id
+
+class IntLitExpr(Expr):
+
+    def __init__(self, intlit: str):
+        self.intlit = int(intlit)
+
+    def __str__(self):
+        return str(self.intlit)
 
 if __name__ == '__main__':
     """
