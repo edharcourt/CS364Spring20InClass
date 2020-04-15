@@ -4,15 +4,23 @@ SLU-C Abstract Syntax Trees
 An abstract syntax tree (AST) is a data structure that represents
 the concrete (text) syntax of a program
 """
-from typing import Sequence
+from typing import Sequence, Union
+
+# Use a class hierarchy to represent types.
 
 class FunctionDef:
     def __init__(self, t, id:str, params, decls, stmts):
         # provide type hints for all of the parameters
+        # Decls should be a dictionary
+        # Key: id
+        # Value: Type
         pass
 
     def __str__(self):
         pass
+
+class Declaration:
+    pass
 
 class Program:
 
@@ -47,6 +55,20 @@ class AddExpr(Expr):
     def __str__(self):
         return "({0} + {1})".format(str(self.left), str(self.right))
 
+    def scheme(self) -> str:
+        """
+        Return a string that represents the expression in Scheme syntax.
+        e.g.,  (a + b)   -> (+ a b)
+        """
+        return "(+ {0} {1})".format(self.left.scheme(), self.right.scheme())
+
+    def eval(self) -> Union[int,float]:
+        # TODO environment
+        return self.left.eval() +  self.right.eval()
+
+
+
+
 class MultExpr(Expr):
     def __init__(self, left: Expr, right: Expr):
         self.left = left
@@ -54,6 +76,17 @@ class MultExpr(Expr):
 
     def __str__(self):
         return "({0} * {1})".format(str(self.left), str(self.right))
+
+    def scheme(self):
+        """
+        Return a string that represents the expression in Scheme syntax.
+        e.g.,  (a * b)   -> (* a b)
+        """
+        return "(* {0} {1})".format(self.left.scheme(), self.right.scheme())
+
+    def eval(self) -> Union[int,float]:
+        # TODO environment
+        return self.left.eval() *  self.right.eval()
 
 
 class UnaryMinus(Expr):
@@ -63,6 +96,12 @@ class UnaryMinus(Expr):
     def __str__(self):
         return "-({0})".format(str(self.tree))
 
+    def scheme(self):
+        return "(- {0})".format(self.tree.scheme())
+
+    def eval(self):
+        return -self.tree.eval()
+
 class IDExpr(Expr):
 
     def __init__(self, id: str):
@@ -71,6 +110,14 @@ class IDExpr(Expr):
     def __str__(self):
         return self.id
 
+    def scheme(self):
+        return self.id
+
+    def eval(self, env):  # a + 7
+        # lookup the value of self.id. Look up where?
+        # env is a dictionary
+        pass
+
 class IntLitExpr(Expr):
 
     def __init__(self, intlit: str):
@@ -78,6 +125,12 @@ class IntLitExpr(Expr):
 
     def __str__(self):
         return str(self.intlit)
+
+    def scheme(self):
+        return str(self.intlit)
+
+    def eval(self):
+        return self.intlit   # base case
 
 if __name__ == '__main__':
     """

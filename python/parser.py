@@ -68,7 +68,11 @@ class Parser:
         -7  -(7 * 5)  -b   unary minus
     """
 
-
+    # top-level function that will be called
+    def program(self):
+        """
+            Program         →  { FunctionDef }
+        """
 
     def equality(self):  # a == b      3*z != 99
         pass
@@ -126,8 +130,9 @@ class Parser:
         # TODO Add real literals
 
         # parse an ID
-        if self.currtok[0] == Lexer.ID:
+        if self.currtok[0] == Lexer.ID:  # using ID in expression
             tmp = self.currtok
+            # TODO check to make sure ID is declared (in the dictionary)
             self.currtok = next(self.tg)
             return IDExpr(tmp[1])
 
@@ -140,7 +145,7 @@ class Parser:
         # parse a parenthesized expression
         if self.currtok[0] == Lexer.LPAREN:
             self.currtok = next(self.tg)
-            tree = self.expr()
+            tree = self.addition() # TODO Keeps changing!
             if self.currtok[0] == Lexer.RPAREN:
                 self.currtok = next(self.tg)
                 return tree
@@ -166,5 +171,6 @@ class SLUCSyntaxError(Exception):
 if __name__ == '__main__':
 
     p = Parser('simple.c')
-    t = p.expr()
+    t = p.addition()
     print(t)
+    print(t.scheme())
