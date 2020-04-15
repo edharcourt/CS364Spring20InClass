@@ -1,6 +1,53 @@
 from lexer import Lexer
 from ast import Expr, AddExpr, MultExpr, UnaryMinus, IDExpr, IntLitExpr
 
+"""
+  Program         →  { FunctionDef }
+
+  FunctionDef     →  Type id ( Params ) { Declarations Statements }
+
+  Params          →  Type id { , Type id } | ε
+
+  Declarations    →  { Declaration }
+
+  Declaration     →  Type  id  ;
+
+  Type            →  int | bool | float
+
+  Statements      →  { Statement }
+
+  Statement       →  ; | Block | Assignment | IfStatement |     
+                     WhileStatement |  PrintStmt | ReturnStmt
+
+  ReturnStmt      →  return Expression ;
+  Block           →  { Statements }
+
+  Assignment      →  id = Expression ;
+
+  IfStatement     →  if ( Expression ) Statement [ else Statement ]
+ 
+  WhileStatement  →  while ( Expression ) Statement  
+
+  PrintStmt       →  print(PrintArg { , PrintArg })
+
+  PrintArg        →  Expression | stringlit
+
+  Expression      →  Conjunction { || Conjunction }
+
+  Conjunction     →  Equality { && Equality }
+ 
+  Equality        →  Relation [ EquOp Relation ]
+
+  Relation        →  Addition [ RelOp Addition ]
+
+  Addition        →  Term { AddOp Term }
+  Term            →  Factor { MulOp Factor }
+  Factor          →  [ UnaryOp ] Primary
+  UnaryOp         →  - | !
+  Primary         →  id | intlit | floatlit | ( Expression )
+  RelOp           →  < | <= | > | >=   AddOp           →  + | -  MulOp           →  * | / | %  EquOp           →  == | != 
+"""
+
 class Parser:
 
     def __init__(self, fn: str):
@@ -21,7 +68,15 @@ class Parser:
         -7  -(7 * 5)  -b   unary minus
     """
 
-    def expr(self) -> Expr:
+
+
+    def equality(self):  # a == b      3*z != 99
+        pass
+
+    def relation(self):  # a < b
+        pass
+
+    def addition(self) -> Expr:
         """
         Expr  →  Term { + Term }
         """
@@ -42,7 +97,7 @@ class Parser:
         """
         left = self.fact()
 
-        while self.currtok[0] in { Lexer.MULT }:
+        while self.currtok[0] in { Lexer.MULT, Lexer.DIVIDE }:
             self.currtok = next(self.tg)
             right = self.fact()
             left = MultExpr(left, right)

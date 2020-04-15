@@ -13,6 +13,7 @@ class Lexer:
     EOF    = 5 # TODO return special end-of-file token
     MULT   = 6
     MINUS  = 7
+    DIVIDE = 8
 
     def __init__(self, fn: str):
         try:
@@ -25,14 +26,11 @@ class Lexer:
     def token_generator(self) -> Generator[Tuple[int, str], None, None]:
 
         # TODO Can we make this more readable by putting this elsewhere?
-        # check out the documentation on |
-        # Don't forget about ^ and $
-        # TEST TEST TEST try and break your code
-        # SOLID
         split_patt = re.compile(
             r"""             # Split on 
                (\+) |        #  plus and capture
                (\*) |        #  times and capture
+               (/)  |        #  divide and capture
                (-)  |        #  minus and capture, minus not special unless in []
                \s   |        #  whitespace
                (\() |        #  left paren and capture
@@ -55,7 +53,11 @@ class Lexer:
                 # TODO replace with a dictionary
                 if t == '+':
                     yield (Lexer.PLUS, t)   # singleton
+                elif t == '-':
+                    yield (Lexer.MINUS, t)  # singleton
                 elif t == '*':
+                    yield (Lexer.MULT, t)
+                elif t == '/':
                     yield (Lexer.MULT, t)
                 elif t == '(':
                     yield (Lexer.LPAREN, t)
