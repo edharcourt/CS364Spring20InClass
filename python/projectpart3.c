@@ -76,7 +76,7 @@ int exp(int x, int y) {
     if (y == 0)
         return 1;
     else
-        return x*exp(y-1);
+        return x*exp(x,y-1);
     print(y);
 }
 
